@@ -1,0 +1,20 @@
+---
+title: "E155 Portfolio"
+image: images/headshot_wchan.jpg
+about:
+    template: jolla
+    links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/wava-chan-b2b894215/
+    - icon: github
+      text: Github
+      href: https://github.com
+
+---
+
+Wava Chan is an Engineering Major from Brookfield, Connecticut. She is currently studying at [Harvey Mudd College](https://hmc.edu), in Claremont, California. In the past, she has worked on a variety of embedded systems projects, from autonomous underwater vehicles to self-driving construction equipment. 
+
+In her free time, she likes to paint, cook (and eat) good food, and frolick in Linde Field with her many friends. 
+
+
