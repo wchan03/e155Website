@@ -1,10 +1,45 @@
 [
   {
+    "objectID": "labs/lab7/lab7.html",
+    "href": "labs/lab7/lab7.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hello World"
+  },
+  {
+    "objectID": "labs/lab5/lab5.html",
+    "href": "labs/lab5/lab5.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hello World"
+  },
+  {
+    "objectID": "labs/lab3/lab3.html",
+    "href": "labs/lab3/lab3.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hello World"
+  },
+  {
     "objectID": "labs/lab1/lab1.html",
     "href": "labs/lab1/lab1.html",
     "title": "Introduction",
     "section": "",
-    "text": "Introduction\nLab #1 involved the configuration and testing of the E155 development board. First, all the necessary parts were soldered per the project board schematic. Then, to confirm functionality of the FPGA, the board was programmed so that the onboard LED would blink at a rate of 2.4Hz, using the onboard high speed oscillator (HSOSC). Then, the board was used to control a 7 segment display, with the input coming from a set of switches on the board, and the display showing the corresponding hex digit.\n\n\nDesign and Testing Methodology\nThe soldering included both SMD and TMD parts to a given PCB.\nThe LED was driven by using the HSOSC at 24MHz and a counter to divide the signal so that the LED could blink at the desired 2.4Hz. Two other LEDs were meant to be driven, but as of right now, they are absent from the board due to materials constraints.\nThe 7-segment display was driven using a module involving a simple case statement, that evaluated the input from the onboard switches, then reflected that value in hex. The display was connected to pins off the FGPA, and each segment was turned on\n\n\nTechnical Documentation\nThe code for the project can be found in this Github repository\n\n\nResults and Discussion\nThe design met all intended objectives.\nHowever, it proved difficult to run the QuestaSim testbench simulation.\n\n\nConclusion\nThe design was able to successfully operate a 7-segment display as well as drive the on-board LED using the HSOSC. I spent 15 hours working on this lab.\n\n\nAI Prototype Summary"
+    "text": "Lab #1 involved the configuration and testing of the E155 development board. First, all the necessary parts were soldered per the project board schematic. Then, to confirm functionality of the FPGA, the board was programmed so that the onboard LED would blink at a rate of 2.4Hz, using the onboard high speed oscillator (HSOSC). Then, the board was used to control a 7 segment display, with the input coming from a set of switches on the board, and the display showing the corresponding hex digit."
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#block-diagram",
+    "href": "labs/lab1/lab1.html#block-diagram",
+    "title": "Introduction",
+    "section": "Block Diagram",
+    "text": "Block Diagram"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#schematic",
+    "href": "labs/lab1/lab1.html#schematic",
+    "title": "Introduction",
+    "section": "Schematic",
+    "text": "Schematic"
   },
   {
     "objectID": "blog.html",
@@ -19,5 +54,19 @@
     "title": "E155 Portfolio",
     "section": "",
     "text": "Wava Chan is an Engineering Major from Brookfield, Connecticut. She is currently studying at Harvey Mudd College, in Claremont, California. In the past, she has worked on a variety of embedded systems projects, from autonomous underwater vehicles to self-driving construction equipment.\nIn her free time, she likes to paint, cook (and eat) good food, and frolick in Linde Field with her many friends."
+  },
+  {
+    "objectID": "labs/lab2/lab2.html",
+    "href": "labs/lab2/lab2.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hello World"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html",
+    "href": "labs/lab6/lab6.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hello World"
   }
 ]
