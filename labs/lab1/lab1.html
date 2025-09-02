@@ -173,6 +173,35 @@ ul.task-list li input[type="checkbox"] {
 <section id="technical-documentation" class="level1">
 <h1>Technical Documentation</h1>
 <p>The code for the project can be found in this <a href="https://github.com/wchan03/e155Lab1">Github repository</a></p>
+<p>The main module is as shown below:</p>
+<p>’// Wava Chan // wchan@g.hmc.edu // Aug.&nbsp;29, 2025 // Main module for testing operation of project board</p>
+<p>module lab1_wc( input logic [3:0] s, output logic [2:0] led, output logic [6:0] seg);</p>
+<pre><code>logic int_osc; // Internal clock
+logic [32:0] counter;
+
+// Segment display module
+seg_disp sd(s, seg);
+
+// START CODE FROM TUTORIAL
+// Internal high-speed oscillator
+HSOSC #(.CLKHF_DIV(2'b01)) 
+        hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+
+// Counter
+always_ff @(posedge int_osc) begin  
+    counter &lt;= counter + 33'd859;
+end
+
+// Assign LED output
+assign led[0] = s[1] ^ s[0];
+assign led[1] = s[3] &amp; s[2];
+assign led[2] = counter[32];
+        
+// END CODE FROM TUTORIAL </code></pre>
+<p>endmodule ’</p>
+<p>This includes a module called seg_disp, which consists of:</p>
+<p>’// Wava Chan // wchan@g.hmc.edu // Aug.&nbsp;29, 2025 // seg_disp determines which segments must be turned on for each hexidec digit</p>
+<p>module seg_disp(input logic [3:0] s, output logic [6:0] seg ); logic [6:0] seg_intm; always_comb begin // seg[0] is A // seg[6] is G case(s) 4’b0000: seg_intm &lt;= 7’b0111111; //0 4’b0001: seg_intm &lt;= 7’b0000110; //1 4’b0010: seg_intm &lt;= 7’b1011011; //2 4’b0011: seg_intm &lt;= 7’b1001111; //3 4’b0100: seg_intm &lt;= 7’b1100110; //4 4’b0101: seg_intm &lt;= 7’b1101101; //5 4’b0110: seg_intm &lt;= 7’b1111101; //6 4’b0111: seg_intm &lt;= 7’b0000111; //7 4’b1000: seg_intm &lt;= 7’b1111111; //8 4’b1001: seg_intm &lt;= 7’b1101111; //9 4’b1010: seg_intm &lt;= 7’b1110111; //A 4’b1011: seg_intm &lt;= 7’b1111100; //B 4’b1100: seg_intm &lt;= 7’b1011000; //C 4’b1101: seg_intm &lt;= 7’b1011110; //D 4’b1110: seg_intm &lt;= 7’b1111001; //E 4’b1111: seg_intm &lt;= 7’b1110001; //F default: seg_intm &lt;= 7’b1111111; endcase seg &lt;= ~seg_intm; // Flip all bits to pull segments DOWN to turn them on end endmodule’</p>
 <section id="block-diagram" class="level2">
 <h2 class="anchored" data-anchor-id="block-diagram">Block Diagram</h2>
 </section>
@@ -191,6 +220,74 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="ai-prototype-summary" class="level1">
 <h1>AI Prototype Summary</h1>
+<p>I fed ChatGPT the given prompt, and it produced the below code</p>
+<p>module led_blink_2hz ( output logic led );</p>
+<pre><code>// Internal oscillator signal
+logic clk_48mhz;
+logic hfosc_en = 1'b1;
+logic hfosc_ready;
+
+// Instantiate the internal high-frequency oscillator
+SB_HFOSC #(
+    .CLKHF_DIV("0b00")  // "00" = 48 MHz, "01" = 24 MHz, etc.
+) hfosc_inst (
+    .CLKHFEN(hfosc_en),     // Enable the oscillator
+    .CLKHFPU(hfosc_en),     // Power up the oscillator
+    .CLKHF(clk_48mhz)       // Output clock signal
+);
+
+// Counter for clock division
+logic [24:0] counter = 25'd0;  // Enough bits to count to 24,000,000
+logic led_state = 0;
+
+always_ff @(posedge clk_48mhz) begin
+    if (counter == 24_000_000 - 1) begin
+        counter &lt;= 0;
+        led_state &lt;= ~led_state;  // Toggle LED every 0.5s → 2 Hz
+    end else begin
+        counter &lt;= counter + 1;
+    end
+end
+
+assign led = led_state;</code></pre>
+<p>endmodule `</p>
+<p>As well as some helpful notes about the prompt and the output</p>
+<p>This code did not sythesize, and produced the error:</p>
+<p>Error 35901063 Synthesis ERROR &lt;35901063&gt; - c:/users/wchan/documents/github/e155lab1/ai_prompt/source/impl_1/ai_prompt.sv(17): instantiating unknown module SB_HFOSC. VERI-1063 [ai_prompt.sv:17]</p>
+<p>I fed this error back into ChatGPT, and it did give me code it claimed was corrected.</p>
+<p>module led_blink_2hz ( output logic led );</p>
+<pre><code>// Internal oscillator signal
+logic clk_int;
+
+// Instantiate internal oscillator (OSCH: ~2.08 MHz)
+OSCH #(
+    .NOM_FREQ("2.08")  // Nominal frequency in MHz
+) osc_inst (
+    .STDBY(1'b0),       // 0 = oscillator enabled
+    .OSC(clk_int),      // Output clock
+    .SEDSTDBY()         // Unused standby status output
+);
+
+// Calculate toggle rate for 2 Hz blink using 2.08 MHz clock
+// 2.08 MHz / 4,160,000 = 0.5s toggle rate (i.e., 2 Hz)
+localparam int TOGGLE_COUNT = 1_040_000;  // Toggle every 0.5s
+
+logic [20:0] counter = 0;
+logic led_state = 0;
+
+always_ff @(posedge clk_int) begin
+    if (counter == TOGGLE_COUNT - 1) begin
+        counter &lt;= 0;
+        led_state &lt;= ~led_state;
+    end else begin
+        counter &lt;= counter + 1;
+    end
+end
+
+assign led = led_state;</code></pre>
+<p>endmodule ’</p>
+<p>However, another error is thrown:</p>
+<p>Error 35901063 Synthesis ERROR &lt;35901063&gt; - c:/users/wchan/documents/github/e155lab1/ai_prompt/source/impl_1/ai_prompt.sv(15): instantiating unknown module OSCH. VERI-1063 [ai_prompt.sv:15]</p>
 
 
 </section>
