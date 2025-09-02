@@ -1,0 +1,5 @@
+---
+Title: "Lab 6"
+Author: "Wava Chan"
+format: html
+--- 

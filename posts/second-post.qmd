@@ -1,0 +1,10 @@
+---
+title: "Week 1"
+description: "Week 1 of E155: Setup"
+author: "Wava Chan"
+date: "9/03/2025"
+categories:
+  - reflection
+  - labreport
+draft: true
+---

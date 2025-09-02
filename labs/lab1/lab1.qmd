@@ -1,0 +1,31 @@
+---
+Title: "Lab 1: FPGA and MCU Setup and Testing"
+Author: "Wava Chan"
+format: html
+--- 
+# Introduction
+Lab #1 involved the configuration and testing of the E155 development board. First, all the necessary parts were soldered per the [project board schematic](https://hmc-e155.github.io/assets/doc/E155%20Development%20Board%20Schematic.pdf). Then, to confirm functionality of the FPGA, the board was programmed so that the onboard LED would blink at a rate of 2.4Hz, using the onboard high speed oscillator (HSOSC). Then, the board was used to control a 7 segment display, with the input coming from a set of switches on the board, and the display showing the corresponding hex digit. 
+
+# Design and Testing Methodology 
+
+The soldering included both SMD and TMD parts to a given PCB. 
+
+The LED was driven by using the HSOSC at 24MHz and a counter to divide the signal so that the LED could blink at the desired 2.4Hz. Two other LEDs were meant to be driven, but as of right now, they are absent from the board due to materials constraints. 
+
+The 7-segment display was driven using a module involving a simple case statement, that evaluated the input from the onboard switches, then reflected that value in hex. The display was connected to pins off the FGPA, and each segment was turned on 
+
+# Technical Documentation 
+
+The code for the project can be found in this [Github repository](https://github.com/wchan03/e155Lab1)
+
+# Results and Discussion 
+
+The design met all intended objectives. 
+
+However, it proved difficult to run the QuestaSim testbench simulation. 
+
+# Conclusion 
+
+The design was able to successfully operate a 7-segment display as well as drive the on-board LED using the HSOSC. I spent 15 hours working on this lab. 
+
+# AI Prototype Summary 
