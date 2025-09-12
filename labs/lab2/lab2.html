@@ -136,8 +136,41 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#design-testing" id="toc-design-testing" class="nav-link" data-scroll-target="#design-testing">Design &amp; Testing</a>
+  <ul class="collapse">
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware">Hardware</a>
+  <ul class="collapse">
+  <li><a href="#pin-assignment" id="toc-pin-assignment" class="nav-link" data-scroll-target="#pin-assignment">Pin Assignment</a></li>
+  </ul></li>
+  <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software">Software</a></li>
+  </ul></li>
+  <li><a href="#technical-documentation" id="toc-technical-documentation" class="nav-link" data-scroll-target="#technical-documentation">Technical Documentation</a>
+  <ul class="collapse">
+  <li><a href="#lab2_wc" id="toc-lab2_wc" class="nav-link" data-scroll-target="#lab2_wc">Lab2_wc</a></li>
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic</a></li>
+  <li><a href="#block-diagram" id="toc-block-diagram" class="nav-link" data-scroll-target="#block-diagram">Block Diagram</a></li>
+  </ul></li>
+  <li><a href="#results-and-discussion" id="toc-results-and-discussion" class="nav-link" data-scroll-target="#results-and-discussion">Results and Discussion</a>
+  <ul class="collapse">
+  <li><a href="#testbench-simulations" id="toc-testbench-simulations" class="nav-link" data-scroll-target="#testbench-simulations">Testbench Simulations</a>
+  <ul class="collapse">
+  <li><a href="#lab2_wc-1" id="toc-lab2_wc-1" class="nav-link" data-scroll-target="#lab2_wc-1">Lab2_wc</a></li>
+  <li><a href="#seg_disp" id="toc-seg_disp" class="nav-link" data-scroll-target="#seg_disp">seg_disp</a></li>
+  <li><a href="#mux" id="toc-mux" class="nav-link" data-scroll-target="#mux">Mux</a></li>
+  <li><a href="#deselect" id="toc-deselect" class="nav-link" data-scroll-target="#deselect">Deselect</a></li>
+  <li><a href="#led-driver" id="toc-led-driver" class="nav-link" data-scroll-target="#led-driver">LED Driver</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -145,9 +178,553 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Hello World</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The goal of Lab 2 was to design a system (circuit and code) that included a dual 7-segment display, each displaying a hex number, and 5 leds, which would show the sum of the two displayed digits in binary. Given the limited number of pins on the FPGA board, the displays had to be driven by a single set of pins, and rely on time multiplexing to (very quickly) switch between the two displays, so that it seemed like both were on simultaneously.</p>
+<p>The input to the displays was provided by two DIP switches.</p>
+</section>
+<section id="design-testing" class="level1">
+<h1>Design &amp; Testing</h1>
+<section id="hardware" class="level2">
+<h2 class="anchored" data-anchor-id="hardware">Hardware</h2>
+<p>The circuit used all the FPGA pins, so there had to be multiplexing between the two displays to correctly display different values at the same time. This was done by driving either (not both) of the common anodes, turning each display on in turn, at a higher frequency than the human eye can detect.</p>
+<p>The base rate for this detection os 40Hz, so 46.2 Hz was chosen to oscillate at.</p>
+<p>The common anode pins on the display were connected to FPGA pins, but these do not provide enough voltage to drive the pin. Thus, the signal to the pins was bolstered by a PNP transistor.</p>
+<p>An external (off-board) DIP switch was also connected to the FPGA. The five LEDs used to display the output were also connected FPGA pins, in series with 390ohm resistors.</p>
+<p>Overall, the pin assignment is as seen below:</p>
+<section id="pin-assignment" class="level3">
+<h3 class="anchored" data-anchor-id="pin-assignment">Pin Assignment</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Pin Assignment</caption>
+<thead>
+<tr class="header">
+<th>logic</th>
+<th>pin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>switch1[0]</td>
+<td>p20</td>
+</tr>
+<tr class="even">
+<td>switch1[1]</td>
+<td>p19</td>
+</tr>
+<tr class="odd">
+<td>switch1[2]</td>
+<td>p21</td>
+</tr>
+<tr class="even">
+<td>switch1[3]</td>
+<td>p10</td>
+</tr>
+<tr class="odd">
+<td>switch2[0]</td>
+<td>p37</td>
+</tr>
+<tr class="even">
+<td>switch2[1]</td>
+<td>p31</td>
+</tr>
+<tr class="odd">
+<td>switch2[2]</td>
+<td>p35</td>
+</tr>
+<tr class="even">
+<td>switch2[3]</td>
+<td>p32</td>
+</tr>
+<tr class="odd">
+<td>seg_out[0]</td>
+<td>p6</td>
+</tr>
+<tr class="even">
+<td>seg_out[1]</td>
+<td>p11</td>
+</tr>
+<tr class="odd">
+<td>seg_out[2]</td>
+<td>p46</td>
+</tr>
+<tr class="even">
+<td>seg_out[3]</td>
+<td>p45</td>
+</tr>
+<tr class="odd">
+<td>seg_out[4]</td>
+<td>p3</td>
+</tr>
+<tr class="even">
+<td>seg_out[5]</td>
+<td>p48</td>
+</tr>
+<tr class="odd">
+<td>seg_out[6]</td>
+<td>p4</td>
+</tr>
+<tr class="even">
+<td>anodes[0]</td>
+<td>p47</td>
+</tr>
+<tr class="odd">
+<td>anodes[1]</td>
+<td>p2</td>
+</tr>
+<tr class="even">
+<td>leds[0]</td>
+<td>p12</td>
+</tr>
+<tr class="odd">
+<td>leds[1]</td>
+<td>p13</td>
+</tr>
+<tr class="even">
+<td>leds[2]</td>
+<td>p48</td>
+</tr>
+<tr class="odd">
+<td>leds[3]</td>
+<td>p9</td>
+</tr>
+<tr class="even">
+<td>leds[4]</td>
+<td>p44</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="software" class="level2">
+<h2 class="anchored" data-anchor-id="software">Software</h2>
+<p>This system had five modules:</p>
+<ol type="1">
+<li>Lab2_wc: This was the main top module</li>
+<li>seg_disp: Combination logic to dictate which segments would turn on</li>
+<li>Mux (2 to 1): used to select between the two input switches</li>
+<li>Deselect: write to one anode or the other</li>
+<li>LED driver: calculate and assign output to the LED pins</li>
+</ol>
+<p>The design was tested using QuestaSim simulations, detailed below in the Results and Discussion section.</p>
+</section>
+</section>
+<section id="technical-documentation" class="level1">
+<h1>Technical Documentation</h1>
+<p>The code for the project can be found in this <a href="https://github.com/wchan03/e155Lab2">Github repository</a></p>
+<section id="lab2_wc" class="level3">
+<h3 class="anchored" data-anchor-id="lab2_wc">Lab2_wc</h3>
+<pre><code>
+// Wava Chan
+// wchan@g.hmc.edu
+// Sept. 4, 2025
+// Top Level Module for Lab 2: Mutiplexed 7-Seg Display
+
+module lab2_wc( input logic [3:0] switch1, 
+                input logic [3:0] switch2, // Two DIP switches
+                output logic [6:0] seg_out,
+                output logic [4:0] leds, 
+                output logic [1:0] anodes); // Writing to the anodes
+                
+                logic select; //0 for display 0, 1 for display 1
+                logic [3:0] switch; // Selected switch data
+                logic int_osc; // internal clock
+                logic [19:0] counter;
+            
+                //Create clock 
+                // Internal high-speed oscillator
+                HSOSC #(.CLKHF_DIV(2'b01)) 
+                    hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+
+                // Counter
+                always_ff @(posedge int_osc) begin  
+                    counter &lt;= counter + 19'd2; //operates at ~46.2 Hz
+                end
+                
+                // Google AI says the human eye can detect up to 40Hz of flickering so started there
+                // Select is based on the clock
+                assign select = counter[19];
+                
+                // Select input
+                mux2 in(switch1, switch2, select, switch); 
+
+                // Segment Display Module
+                seg_disp sd(switch, seg_out); // Calculate segments 
+                
+                // Select output 
+                //write HIGH to common anode 1 or common anode 2, depending on select
+                demux2_1 dm(select, anodes); 
+                
+                // LEDs calculation from switch 1 and switch 2 and LED assignment
+                leds_lab2 sum(switch1, switch2, leds);
+
+ endmodule 
+</code></pre>
+<p>### seg_disp</p>
+<pre><code>
+// Wava Chan 
+// wchan@g.hmc.edu 
+// Aug. 29, 2025 
+// seg_disp determines which segments must be turned on for each hexidec digit
+
+module seg_disp(input logic [3:0] s, 
+               output logic [6:0] seg ); 
+               
+   logic [6:0] seg_intm;
+   
+   always_comb begin 
+       // seg[0] is A 
+       // seg[6] is G 
+       case(s)
+           4'b0000: seg_intm &lt;= 7'b0111111; //0
+           4'b0001: seg_intm &lt;= 7'b0000110; //1 
+           4'b0010: seg_intm &lt;= 7'b1011011; //2 
+           4'b0011: seg_intm &lt;= 7'b1001111; //3 
+           4'b0100: seg_intm &lt;= 7'b1100110; //4 
+           4'b0101: seg_intm &lt;= 7'b1101101; //5 
+           4'b0110: seg_intm &lt;= 7'b1111101; //6 
+           4'b0111: seg_intm &lt;= 7'b0000111; //7 
+           4'b1000: seg_intm &lt;= 7'b1111111; //8 
+           4'b1001: seg_intm &lt;= 7'b1101111; //9 
+           4'b1010: seg_intm &lt;= 7'b1110111; //A 
+           4'b1011: seg_intm &lt;= 7'b1111100; //B 
+           4'b1100: seg_intm &lt;= 7'b1011000; //C 
+           4'b1101: seg_intm &lt;= 7'b1011110; //D 
+           4'b1110: seg_intm &lt;= 7'b1111001; //E 
+           4'b1111: seg_intm &lt;= 7'b1110001; //F 
+           default: seg_intm &lt;= 7'b1111111;
+       endcase 
+       
+       seg &lt;= ~seg_intm; // Flip all bits to pull segments DOWN to turn them on 
+   end
+endmodule
+</code></pre>
+<p>### Mux</p>
+<pre><code>// Wava Chan
+// wchan@g.hmc.edu
+// Sept. 5, 2025
+// Basic 2-in 1-out mux
+
+module mux2 #(parameter WIDTH = 4)
+           (input logic [WIDTH-1:0] d0, d1,
+           input logic s,
+           output logic [WIDTH-1:0] out);
+           
+   assign out = s ? d1 : d0;
+   
+endmodule </code></pre>
+<p>### Deselect</p>
+<pre><code>// Wava Chan
+// wchan@g.hmc.edu
+// Sept. 5, 2025
+// Basic demux 1 in 2 out for Lab 2
+
+module demux2_1(input logic select,
+               output logic [1:0] com_an); //Common Anode
+   
+   always_comb begin
+       case(select)
+           1'b0: com_an = 2'b10; // turn on common anode 1
+           1'b1: com_an = 2'b01; // turn on common anode 2
+           default: com_an = 2'b00;
+       endcase
+   end
+endmodule</code></pre>
+<p>### LED Driver</p>
+<pre><code>// Wava Chan
+// wchan@g.hmc.edu
+// Sept. 5, 2025
+// Calculate sum of two switch values and write to LEDs
+
+module leds_lab2(input logic [3:0] switch1, switch2, 
+              output logic [4:0] leds);
+  logic [4:0] total; // Values from two switches added together
+  
+  //Calculate total 
+  assign total = switch1 + switch2; 
+  
+  // Assign LEDs appropriately
+  assign leds = total;
+              
+endmodule</code></pre>
+</section>
+<section id="schematic" class="level2">
+<h2 class="anchored" data-anchor-id="schematic">Schematic</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/block_diagram.jpeg" class="img-fluid figure-img"></p>
+<figcaption>Figure 1. Circuit Schematic</figcaption>
+</figure>
+</div>
+</section>
+<section id="block-diagram" class="level2">
+<h2 class="anchored" data-anchor-id="block-diagram">Block Diagram</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/schematic.jpeg" class="img-fluid figure-img"></p>
+<figcaption>Figure 2. Block Diagram of HDL code</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="results-and-discussion" class="level1">
+<h1>Results and Discussion</h1>
+<p>The design met all the design objectives. The frequency of the toggling was a little slow, and could be picked up by the human eye on occasion, but this is an easy fix. (I just had trouble re-programming my board)</p>
+<section id="testbench-simulations" class="level2">
+<h2 class="anchored" data-anchor-id="testbench-simulations">Testbench Simulations</h2>
+<p>In terms of testing, each of the modules was tested individually. The lower level modules (2-5) were tested to ensure their logical functionality, while the top module (Lab2_wc) was tested to ensure the correct toggling.</p>
+<section id="lab2_wc-1" class="level3">
+<h3 class="anchored" data-anchor-id="lab2_wc-1">Lab2_wc</h3>
+<p>The output of the toggling was tested/validated using this code:</p>
+<pre><code>//Wava Chan
+//wchan@g.hmc.edu
+//Sept. 7, 2025
+//Overall testing of top-level module
+
+`timescale 1ns/1ps
+
+//`define ASSERT() assert else $error
+
+module lab2_testbench();
+
+    logic clk, reset;
+    logic [3:0] switch1, switch2;
+    logic [6:0] seg_out;
+    logic [4:0] leds;
+    logic [1:0] anodes;
+ 
+
+    //Instantiate dut. Operates at 46.2Hz
+    lab2_wc dut(switch1, switch2, seg_out, leds, anodes);
+
+    // Generate clock 
+    always 
+        begin 
+            clk = 1; #43290045; clk = 0; #43290045;
+        end 
+        
+    initial begin
+        dut.counter = 0;
+        // check assertions
+        switch1 = 4'b0101
+        switch2 = 4'b1000
+        //seg_out = 1110001, leds = 01111
+        //check if only one or the other is high
+        assert 
+            property (@(posedge clk) anodes[0] |-&gt; (anodes[1] == 0))
+            else $error ("not toggling");
+        $finish
+    end
 
 
+endmodule</code></pre>
+</section>
+<section id="seg_disp" class="level3">
+<h3 class="anchored" data-anchor-id="seg_disp">seg_disp</h3>
+<p>This was tested last lab, but verified again this lab.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/seg_disp_waveform.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 3. seg_disp module simulation waveforms</figcaption>
+</figure>
+</div>
+</section>
+<section id="mux" class="level3">
+<h3 class="anchored" data-anchor-id="mux">Mux</h3>
+<p>A simple testbench was created, and the output is as seen below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mux_waveforms.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 4. Mux simulation output</figcaption>
+</figure>
+</div>
+</section>
+<section id="deselect" class="level3">
+<h3 class="anchored" data-anchor-id="deselect">Deselect</h3>
+<p>A simple testbench was created, and the code is as seen below:</p>
+<pre><code>// Wava Chan
+// wchan@g.hmc.edu
+// Sept. 8, 2025
+// Testbench for the lab 2 demux module
+
+module mux2_testbench();
+    logic clk, reset, select;
+    logic [1:0] anode_out, anode_expected;
+    
+    // 0 selects switch 2, 1 selects switch 1
+    //Instantiate device under test
+    demux2_1 dut(select, anode_out); 
+    
+    // Generate clock 
+    always 
+        begin 
+            clk = 1; #5; clk = 0; #5;
+        end 
+        
+    initial
+        begin
+            select = 1'b0; #1; assert(anode_out == 2'b10) else $error ("for select = 0, error!");
+            select = 1'b1; #1; assert(anode_out == 2'b01) else $error ("for select = 1, error!");
+            $finish;
+        end
+
+endmodule</code></pre>
+</section>
+<section id="led-driver" class="level3">
+<h3 class="anchored" data-anchor-id="led-driver">LED Driver</h3>
+<p>A simple testbench was created, testing every possible combination of switch inputs, and the output is as seen below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/leds_waveform.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 6. LED Driver module simulation waveforms</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this lab, I successfully designed and built a circuit that displayed the hex input of two different DIP switches, as well as showed the sum of those two values via a series of 5 LEDs. I spend 20 hours on this lab</p>
+</section>
+<section id="ai-prototype" class="level1">
+<h1>AI Prototype</h1>
+<p>For this prototype, I used Microsoft CoPilot instead of ChatGPT.</p>
+<p>CoPiolot produced a fairly simple script, as seen below. It does not include some of the details I included in my code, such as the use of HFOSC . There are two modules: a multiplexer and a decoder.</p>
+<pre><code>module seven_segment_multiplexer (
+    input logic clk,
+    input logic rst,
+    input logic [3:0] in0,
+    input logic [3:0] in1,
+    output logic [6:0] seg0,
+    output logic [6:0] seg1
+);
+
+    // Internal signals
+    logic [3:0] current_input;
+    logic [6:0] decoded_output;
+    logic toggle;
+
+    // Toggle between inputs every clock cycle
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst)
+            toggle &lt;= 0;
+        else
+            toggle &lt;= ~toggle;
+    end
+
+    // Select input based on toggle
+    always_comb begin
+        current_input = toggle ? in1 : in0;
+    end
+
+    // Instantiate decoder
+    seven_segment_decoder decoder_inst (
+        .bin(current_input),
+        .seg(decoded_output)
+    );
+
+    // Store decoded output into appropriate register
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            seg0 &lt;= 7'b1111111;
+            seg1 &lt;= 7'b1111111;
+        end else begin
+            if (toggle)
+                seg1 &lt;= decoded_output;
+            else
+                seg0 &lt;= decoded_output;
+        end
+    end
+
+endmodule
+
+// 4-bit to 7-segment decoder (common anode)
+module seven_segment_decoder (
+    input logic [3:0] bin,
+    output logic [6:0] seg
+);
+    always_comb begin
+        case (bin)
+            4'h0: seg = 7'b0000001;
+            4'h1: seg = 7'b1001111;
+            4'h2: seg = 7'b0010010;
+            4'h3: seg = 7'b0000110;
+            4'h4: seg = 7'b1001100;
+            4'h5: seg = 7'b0100100;
+            4'h6: seg = 7'b0100000;
+            4'h7: seg = 7'b0001111;
+            4'h8: seg = 7'b0000000;
+            4'h9: seg = 7'b0000100;
+            4'hA: seg = 7'b0001000;
+            4'hB: seg = 7'b1100000;
+            4'hC: seg = 7'b0110001;
+            4'hD: seg = 7'b1000010;
+            4'hE: seg = 7'b0110000;
+            4'hF: seg = 7'b0111000;
+            default: seg = 7'b1111111; // All segments off
+        endcase
+    end
+endmodule</code></pre>
+<p>This code did indeed synthesize on Lattice.</p>
+<p>When I applied the other prompt (while attaching my own code), I receive this code back:</p>
+<pre><code>module dual_seg_mux (
+    input  logic [3:0] in0,         // First 4-bit input
+    input  logic [3:0] in1,         // Second 4-bit input
+    output logic [6:0] seg0,        // Output to first display
+    output logic [6:0] seg1,        // Output to second display
+    output logic [2:0] led          // LED outputs
+);
+
+    // Internal oscillator and counter
+    logic int_osc;
+    logic [32:0] counter;
+    logic [3:0] mux_input;
+    logic [6:0] seg_out;
+    logic mux_sel;
+
+    // Instantiate internal oscillator
+    HSOSC #(.CLKHF_DIV(2'b01)) hf_osc (
+        .CLKHFPU(1'b1),
+        .CLKHFEN(1'b1),
+        .CLKHF(int_osc)
+    );
+
+    // Instantiate shared segment decoder
+    seg_disp sd (
+        .s(mux_input),
+        .seg(seg_out)
+    );
+
+    // Counter for timing and multiplex control
+    always_ff @(posedge int_osc) begin
+        counter &lt;= counter + 33'd859;
+        mux_sel &lt;= counter[15]; // Toggle every ~32k cycles
+    end
+
+    // Multiplex input selection
+    always_comb begin
+        mux_input = mux_sel ? in1 : in0;
+    end
+
+    // Drive outputs alternately
+    always_ff @(posedge int_osc) begin
+        if (mux_sel)
+            seg1 &lt;= seg_out;
+        else
+            seg0 &lt;= seg_out;
+    end
+
+    // LED logic (example reuse from original)
+    assign led[0] = mux_input[1] ^ mux_input[0];
+    assign led[1] = mux_input[3] &amp; mux_input[2];
+    assign led[2] = counter[32];
+
+endmodule</code></pre>
+<p>as well as these comments: <img src="images/ai_prototype.png" class="img-fluid"></p>
+<p>which also synthesized!</p>
+<p>The second code was more complex, and more closely aligned with what my current code looks like, since it is based on previous code.</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
