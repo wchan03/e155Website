@@ -9,9 +9,44 @@
   {
     "objectID": "labs/lab5/lab5.html",
     "href": "labs/lab5/lab5.html",
-    "title": "E155 Portfolio",
+    "title": "Introduction",
     "section": "",
-    "text": "Hello World"
+    "text": "In Lab 5, a quadrature encoder was used to read a motor speed. The decoding of the output signals was performed on the STM32L4 using interrupt-based code."
+  },
+  {
+    "objectID": "labs/lab5/lab5.html#code",
+    "href": "labs/lab5/lab5.html#code",
+    "title": "Introduction",
+    "section": "Code",
+    "text": "Code\nThe interrupt lines were attached to two GPIO pins, which were connected to quadrature encoder sensors. To configure the interrupt lines, the given STM libraries were used. There was a separate interrupt handler for each of the two signals, where the interrupt was triggered on the rising AND falling edge of the signal. Each time the interrupt was triggered, a global counter was incremented. A timer was also used.\nAfter a designated period (200ms, determined using the timer), the main function would calculate the speed using the value in the global counter, as well as the value in the timer. After the calculation was made, both the timer and the counter would be reset to 0, and the cycle would start again.\nTo calculate the speed of the motor, in rev/s, was calculated below.\n\n\n\nFigure 1: Encoder Calculations\n\n\nThe direction of the motor was determined using a truth table and corresponding boolean equation, depending on which interrupt, A or B, was triggered.\n\n\n\nFigure 2: Direction Determination\n\n\nBoth of these calculations happen in the main loop, not in the interrupt handler."
+  },
+  {
+    "objectID": "labs/lab5/lab5.html#hardware",
+    "href": "labs/lab5/lab5.html#hardware",
+    "title": "Introduction",
+    "section": "Hardware",
+    "text": "Hardware\nThe encoder was a complete unit that was attached to a power supply (ranging from 0-12V), the 5V pin and ground pin off the board, and two output pins. The power supply drove the motor, the 5V and ground pins drove the sensors, and the two input pins read the output of the sensors. These were connected per the datasheet. The schematic below shows these connections more clearly."
+  },
+  {
+    "objectID": "labs/lab5/lab5.html#schematic",
+    "href": "labs/lab5/lab5.html#schematic",
+    "title": "Introduction",
+    "section": "Schematic",
+    "text": "Schematic\n\n\n\nFigure 3: Encoder Schematic"
+  },
+  {
+    "objectID": "labs/lab5/lab5.html#flowchart",
+    "href": "labs/lab5/lab5.html#flowchart",
+    "title": "Introduction",
+    "section": "Flowchart",
+    "text": "Flowchart\n\n\n\nFigure 4: Code Flowchart"
+  },
+  {
+    "objectID": "labs/lab5/lab5.html#interrupt-vs.-manual-polling",
+    "href": "labs/lab5/lab5.html#interrupt-vs.-manual-polling",
+    "title": "Introduction",
+    "section": "Interrupt vs. Manual Polling",
+    "text": "Interrupt vs. Manual Polling\nInterrupt-based code will perform faster than manual polling, especially at higher speeds. Interrupts are only triggered when configured to (i.e., when a signal is recieved), meaning that the necessary processes can be performed exactly when necessary.\nConversely, polling typically involves a loop, and continuous checking of a flag. This is slightly more simple, but comes with multiple drawbacks. Firstly, it does not allow for the CPU to perform any other tasks at the same time. Secondly, since the function must loop through the rest of the code, the CPU might miss the beginning of the signal, and not catch it until the next polling loop. This will cause delays with more complex code or when high speed is necessary."
   },
   {
     "objectID": "labs/lab3/lab3.html",
@@ -96,6 +131,41 @@
     "title": "Introduction",
     "section": "Testbench Simulations",
     "text": "Testbench Simulations\nIn terms of testing, each of the modules was tested individually. The lower level modules (2-5) were tested to ensure their logical functionality, while the top module (Lab2_wc) was tested to ensure the correct toggling.\n\nLab2_wc\nThe output of the toggling was tested/validated using this code:\n//Wava Chan\n//wchan@g.hmc.edu\n//Sept. 7, 2025\n//Overall testing of top-level module\n\n`timescale 1ns/1ps\n\n//`define ASSERT() assert else $error\n\nmodule lab2_testbench();\n\n    logic clk, reset;\n    logic [3:0] switch1, switch2;\n    logic [6:0] seg_out;\n    logic [4:0] leds;\n    logic [1:0] anodes;\n \n\n    //Instantiate dut. Operates at 46.2Hz\n    lab2_wc dut(switch1, switch2, seg_out, leds, anodes);\n\n    // Generate clock \n    always \n        begin \n            clk = 1; #43290045; clk = 0; #43290045;\n        end \n        \n    initial begin\n        dut.counter = 0;\n        // check assertions\n        switch1 = 4'b0101\n        switch2 = 4'b1000\n        //seg_out = 1110001, leds = 01111\n        //check if only one or the other is high\n        assert \n            property (@(posedge clk) anodes[0] |-&gt; (anodes[1] == 0))\n            else $error (\"not toggling\");\n        $finish\n    end\n\n\nendmodule\n\n\nseg_disp\nThis was tested last lab, but verified again this lab.\n\n\n\nFigure 3. seg_disp module simulation waveforms\n\n\n\n\nMux\nA simple testbench was created, and the output is as seen below:\n\n\n\nFigure 4. Mux simulation output\n\n\n\n\nDeselect\nA simple testbench was created, and the code is as seen below:\n// Wava Chan\n// wchan@g.hmc.edu\n// Sept. 8, 2025\n// Testbench for the lab 2 demux module\n\nmodule mux2_testbench();\n    logic clk, reset, select;\n    logic [1:0] anode_out, anode_expected;\n    \n    // 0 selects switch 2, 1 selects switch 1\n    //Instantiate device under test\n    demux2_1 dut(select, anode_out); \n    \n    // Generate clock \n    always \n        begin \n            clk = 1; #5; clk = 0; #5;\n        end \n        \n    initial\n        begin\n            select = 1'b0; #1; assert(anode_out == 2'b10) else $error (\"for select = 0, error!\");\n            select = 1'b1; #1; assert(anode_out == 2'b01) else $error (\"for select = 1, error!\");\n            $finish;\n        end\n\nendmodule\n\n\nLED Driver\nA simple testbench was created, testing every possible combination of switch inputs, and the output is as seen below:\n\n\n\nFigure 6. LED Driver module simulation waveforms"
+  },
+  {
+    "objectID": "labs/lab4/lab4.html",
+    "href": "labs/lab4/lab4.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "In Lab 4, the MCU was configured to output a signal to a speaker with the intent to play a pre-determined song. Specifically, TIMER15 and TIMER16 were used to produce a square wave, driven to the speaker to play a note, and a delay timer, to play the note for the correct duration.\nUsing this methodology, the design is able to play Fur Elise, as well as a version of Hozier’s Jackie and Wilson."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#code",
+    "href": "labs/lab4/lab4.html#code",
+    "title": "Introduction",
+    "section": "Code",
+    "text": "Code\nThe two components of a note are pitch and duration, both of which were produced by timers present in the MCU.\nThe signal for the speaker was generated by TIMER15, as it has the capabilties to produce a PWM, or a square wave, with a settable frequency.\nThen, the length of the note was determined by using TIMER16 to produce a delay, measuring in milliseconds.\nTo configure both of these timers, first, a library for them was written. This is to easily set all the necessary bits/registers. Then, each note in a given song is played by first setting the pitch/frequency of TIMER15 PWM signal, then delaying by the length of the note, before moving to the next note and starting the process over again.\nThe PWM signal was written directly to PA2 (or A7, on the Nucleo Board), by configuring the GPIO pin to use its alternate function: TIM15_CH1 (Timer 15 Channel 1).\nAll this is in addition to configuring the system clock to run at 80Mhz (using the PLL clock), and configuring the flash. This was done via provided code."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#hardware",
+    "href": "labs/lab4/lab4.html#hardware",
+    "title": "Introduction",
+    "section": "Hardware",
+    "text": "Hardware\nThe signal from the Nucleo board (specifically, pin A2). is too small to appropriatley power a speaker. As such, the signal had to be amplified.\nFor this lab, the hardware was very simple. The datasheet of the LM386 Low Voltage Audio Power Amplifier provides a variety of example circuits with a variety of gains. By following the Gain = 20 application (pg. 10), the circuit schematic was designed. A 10k potentiometer was included for volume control."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#testing",
+    "href": "labs/lab4/lab4.html#testing",
+    "title": "Introduction",
+    "section": "Testing",
+    "text": "Testing\nTesting was completed by ensuring each of the modules (pitch setter and delay) worked separately, via an oscilliscope.\nTo ensure the entire range of pitches could be achieved, a range of pitches were calculated to ensure the output pitch would be within 1% of the desired pitch. To more fully test the functionality, all possible frequencies should have the same calculations run.\nAdditionally, the maximum and minimum pitch and duration were all calculated. These are limited by the maximum size of the TIMx_ARR register, which is 16 bits, thus having a maximum value of 65,535. The minimum is due to the internal workings of the code."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#schematic",
+    "href": "labs/lab4/lab4.html#schematic",
+    "title": "Introduction",
+    "section": "Schematic",
+    "text": "Schematic\nThe circuit design is as follows. The\n\n\n\nFigure 2. Circuit Diagram for speaker circuit"
   },
   {
     "objectID": "labs/lab6/lab6.html",

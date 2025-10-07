@@ -136,8 +136,30 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#design-and-testing" id="toc-design-and-testing" class="nav-link" data-scroll-target="#design-and-testing">Design and Testing</a>
+  <ul class="collapse">
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware">Hardware</a></li>
+  </ul></li>
+  <li><a href="#technical-documentation" id="toc-technical-documentation" class="nav-link" data-scroll-target="#technical-documentation">Technical Documentation</a>
+  <ul class="collapse">
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic</a></li>
+  <li><a href="#flowchart" id="toc-flowchart" class="nav-link" data-scroll-target="#flowchart">Flowchart</a></li>
+  </ul></li>
+  <li><a href="#results-and-discussion" id="toc-results-and-discussion" class="nav-link" data-scroll-target="#results-and-discussion">Results and Discussion</a>
+  <ul class="collapse">
+  <li><a href="#interrupt-vs.-manual-polling" id="toc-interrupt-vs.-manual-polling" class="nav-link" data-scroll-target="#interrupt-vs.-manual-polling">Interrupt vs.&nbsp;Manual Polling</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -145,9 +167,170 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Hello World</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In Lab 5, a quadrature encoder was used to read a motor speed. The decoding of the output signals was performed on the STM32L4 using interrupt-based code.</p>
+</section>
+<section id="design-and-testing" class="level1">
+<h1>Design and Testing</h1>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<p>The interrupt lines were attached to two GPIO pins, which were connected to quadrature encoder sensors. To configure the interrupt lines, the given STM libraries were used. There was a separate interrupt handler for each of the two signals, where the interrupt was triggered on the rising AND falling edge of the signal. Each time the interrupt was triggered, a global counter was incremented. A timer was also used.</p>
+<p>After a designated period (200ms, determined using the timer), the main function would calculate the speed using the value in the global counter, as well as the value in the timer. After the calculation was made, both the timer and the counter would be reset to 0, and the cycle would start again.</p>
+<p>To calculate the speed of the motor, in rev/s, was calculated below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Lab5 calcs.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1: Encoder Calculations</figcaption>
+</figure>
+</div>
+<p>The direction of the motor was determined using a truth table and corresponding boolean equation, depending on which interrupt, A or B, was triggered.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Lab5 direction.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 2: Direction Determination</figcaption>
+</figure>
+</div>
+<p>Both of these calculations happen in the main loop, not in the interrupt handler.</p>
+</section>
+<section id="hardware" class="level2">
+<h2 class="anchored" data-anchor-id="hardware">Hardware</h2>
+<p>The encoder was a complete unit that was attached to a power supply (ranging from 0-12V), the 5V pin and ground pin off the board, and two output pins. The power supply drove the motor, the 5V and ground pins drove the sensors, and the two input pins read the output of the sensors. These were connected per the datasheet. The schematic below shows these connections more clearly.</p>
+</section>
+</section>
+<section id="technical-documentation" class="level1">
+<h1>Technical Documentation</h1>
+<p>The code for this solution can be found <a href="https://github.com/wchan03/e155Lab5">here</a>, in the appropriate Git Repository.</p>
+<section id="schematic" class="level2">
+<h2 class="anchored" data-anchor-id="schematic">Schematic</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Lab5_schematic.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 3: Encoder Schematic</figcaption>
+</figure>
+</div>
+</section>
+<section id="flowchart" class="level2">
+<h2 class="anchored" data-anchor-id="flowchart">Flowchart</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Lab5 flowchart.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 4: Code Flowchart</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="results-and-discussion" class="level1">
+<h1>Results and Discussion</h1>
+<p>This design met all the intended requirements. It can read the speed of the motor, as well as the direction.</p>
+<section id="interrupt-vs.-manual-polling" class="level2">
+<h2 class="anchored" data-anchor-id="interrupt-vs.-manual-polling">Interrupt vs.&nbsp;Manual Polling</h2>
+<p>Interrupt-based code will perform faster than manual polling, especially at higher speeds. Interrupts are only triggered when configured to (i.e., when a signal is recieved), meaning that the necessary processes can be performed exactly when necessary.</p>
+<p>Conversely, polling typically involves a loop, and continuous checking of a flag. This is slightly more simple, but comes with multiple drawbacks. Firstly, it does not allow for the CPU to perform any other tasks at the same time. Secondly, since the function must loop through the rest of the code, the CPU might miss the beginning of the signal, and not catch it until the next polling loop. This will cause delays with more complex code or when high speed is necessary.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>The design was able to successfully read the speed of the motor using all rising and falling edges of the encoder sensor signals.</p>
+<p>I spent a total of 10 hours on this lab.</p>
+</section>
+<section id="ai-prototype" class="level1">
+<h1>AI Prototype</h1>
+<p>I asked ChatGPT the given prompt:</p>
+<p>Write me interrupt handlers to interface with a quadrature encoder. I’m using the STM32L432KC, what pins should I connect the encoder to in order to allow it to easily trigger the interrupts?</p>
+<p>ChatGPT strongly suggests using the TIM2 encoder mode, something I was unaware of. It seems this LLM has a tendancy to infer the point of your code and suggest a “more efficient” way of doing so, bypassing some more nitty-gritty work.</p>
+<p><img src="images/ai_prompt1.png" class="img-fluid"> <img src="images/ai_prompt2.png" class="img-fluid"></p>
+<p>Here is the code it produced:</p>
+<pre class="{c}"><code>TIM_HandleTypeDef htim2;
+
+void MX_TIM2_Init(void)
+{
+    TIM_Encoder_InitTypeDef sConfig = {0};
+    TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = 0;
+    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim2.Init.Period = 0xFFFF;
+    htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim2.Init.RepetitionCounter = 0;
+    htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+    sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+    sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+    sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+    sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+    sConfig.IC1Filter = 3;
+    sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+    sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+    sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+    sConfig.IC2Filter = 3;
+
+    HAL_TIM_Encoder_Init(&amp;htim2, &amp;sConfig);
+
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    HAL_TIMEx_MasterConfigSynchronization(&amp;htim2, &amp;sMasterConfig);
+
+    HAL_TIM_Encoder_Start(&amp;htim2, TIM_CHANNEL_ALL);
+}</code></pre>
+<p>Then in your main loop:</p>
+<pre class="{c}"><code>int16_t encoder_count = (int16_t)__HAL_TIM_GET_COUNTER(&amp;htim2);</code></pre>
+<p>ChatGPT claims this uses hardware decoding — no interrupt latency, clean and accurate.</p>
+<p>It does also provide a way to use interrupts (and thus manual decoding), which is closer to what was used in this lab.</p>
+<pre class="{c}"><code>
+// EXTI configuration (rising + falling edges)
+void MX_GPIO_Init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);
+
+    HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    HAL_NVIC_SetPriority(EXTI1_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+}
+
+volatile int32_t encoder_position = 0;
+
+// Interrupt Handlers-- keeping track of position and direction manually
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    uint8_t a = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+    uint8_t b = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1);
+
+    if (GPIO_Pin == GPIO_PIN_0 || GPIO_Pin == GPIO_PIN_1)
+    {
+        // Quadrature decoding
+        if (a == b)
+            encoder_position++;
+        else
+            encoder_position--;
+    }
+}
+
+//IRQ Entry Points
+
+void EXTI0_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+}
+
+void EXTI1_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+}
+
+</code></pre>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
