@@ -191,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 <figcaption>Figure 2: Direction Determination</figcaption>
 </figure>
 </div>
-<p>Both of these calculations happen in the main loop, not in the interrupt handler.</p>
+<p>The direction calculation happened when the interrupt was triggered, to avoid delay, but the speed calculations happen inside main.</p>
 </section>
 <section id="hardware" class="level2">
 <h2 class="anchored" data-anchor-id="hardware">Hardware</h2>
