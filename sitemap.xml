@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://wchan03.github.io/e155Website/project.html</loc>
+    <lastmod>2025-10-16T19:16:28.902Z</lastmod>
+  </url>
+  <url>
     <loc>https://wchan03.github.io/e155Website/labs/lab7/lab7.html</loc>
     <lastmod>2025-09-02T18:34:22.458Z</lastmod>
   </url>
@@ -39,5 +43,9 @@
   <url>
     <loc>https://wchan03.github.io/e155Website/posts/first-post.html</loc>
     <lastmod>2025-08-29T02:19:18.488Z</lastmod>
+  </url>
+  <url>
+    <loc>https://wchan03.github.io/e155Website/project/projectproposal.html</loc>
+    <lastmod>2025-10-16T19:14:16.346Z</lastmod>
   </url>
 </urlset>
