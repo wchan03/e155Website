@@ -193,14 +193,14 @@
     "href": "labs/lab6/lab6.html#code",
     "title": "Introduction",
     "section": "Code",
-    "text": "Code\nFor the USART, the Lab 6 starter code provided a great deal of the implementation. I only had to write an additional form for the webpage in HTML, and use the form information to program the DS1722. To communicate through SPI, there needed to be two functions: initSPI and spiSendRecieve, which were written using the specifications in the user manual. There also needed to be a function to decode the data recieved over SPI from the DS1722."
+    "text": "Code\nFor the USART, the Lab 6 starter code provided a great deal of the implementation. I only had to write an additional form for the webpage in HTML, and use the form information to program the DS1722, based on the specifications from the DS1722 datasheet. To communicate through SPI, there needed to be two functions: initSPI and spiSendRecieve, which were written using the specifications in the user manual. There also needed to be a function to decode the data recieved over SPI from the DS1722, which was also done based on how the data was formatted according to the DS1722 datasheet."
   },
   {
     "objectID": "labs/lab6/lab6.html#hardware",
     "href": "labs/lab6/lab6.html#hardware",
     "title": "Introduction",
     "section": "Hardware",
-    "text": "Hardware\nThe hardware for this lab was simple. There is already a port for the ESP8266 lab-provided boards, as seen in this schematic, so it was simple to plug it in and use. The DS1722 had to be connected according to its data sheet. The exact layout can be seen below in the schematic section. The pin assignment is as follows:\n\n\n\nFunction\nport\npin\n\n\n\n\nChipSelect\nPA4\nA3\n\n\nSCK\nPA1\nA1\n\n\nCIPO\nPB4\nD12\n\n\nCOPI\nPA12\nD2"
+    "text": "Hardware\nThe hardware for this lab was simple. There is already a port for the ESP8266 lab-provided boards, as seen in this schematic, so it was simple to plug it in and use. The DS1722 had to be connected according to its pin out, and what functionality was desired (which was 4-wire SPI). The exact layout can be seen below in the schematic section. The pin assignment is as follows:\n\n\n\nFunction\nport\npin\n\n\n\n\nChipSelect\nPA4\nA3\n\n\nSCK\nPA1\nA1\n\n\nCIPO\nPB4\nD12\n\n\nCOPI\nPA12\nD2\n\n\n\nThe temperature sensor also had to be powered and grounded."
   },
   {
     "objectID": "labs/lab6/lab6.html#schematic",
