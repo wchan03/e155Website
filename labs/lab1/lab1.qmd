@@ -20,7 +20,8 @@ The code for the project can be found in this [Github repository](https://github
 
 The main module is as shown below: 
 
-'// Wava Chan 
+```
+// Wava Chan 
 // wchan@g.hmc.edu
 // Aug. 29, 2025
 // Main module for testing operation of project board
@@ -54,11 +55,13 @@ module lab1_wc(
 	// END CODE FROM TUTORIAL 
 	
 	
-endmodule '
+endmodule 
+```
 
 This includes a module called seg_disp, which consists of: 
 
-'// Wava Chan 
+```
+// Wava Chan 
 // wchan@g.hmc.edu
 // Aug. 29, 2025
 // seg_disp determines which segments must be turned on for each hexidec digit
@@ -91,7 +94,8 @@ module seg_disp(input logic [3:0] s,
 		endcase
 		seg <= ~seg_intm; // Flip all bits to pull segments DOWN to turn them on 
 	end
-endmodule'
+endmodule
+```
 
 ## Block Diagram
 
@@ -115,6 +119,7 @@ The design was able to successfully operate a 7-segment display as well as drive
 
 I fed ChatGPT the given prompt, and it produced the below code 
 
+```
 module led_blink_2hz (
     output logic led
 );
@@ -149,7 +154,7 @@ module led_blink_2hz (
     assign led = led_state;
 
 endmodule
-`
+```
 
 As well as some helpful notes about the prompt and the output:
 
@@ -164,6 +169,7 @@ Error 35901063 Synthesis ERROR <35901063> - c:/users/wchan/documents/github/e155
 
 I fed this error back into ChatGPT, and it did give me code it claimed was corrected. 
 
+```
 module led_blink_2hz (
     output logic led
 );
@@ -199,7 +205,7 @@ module led_blink_2hz (
     assign led = led_state;
 
 endmodule
-'
+```
 
 However, another error is thrown: 
 
