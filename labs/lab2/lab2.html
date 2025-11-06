@@ -191,6 +191,8 @@ ul.task-list li input[type="checkbox"] {
 <p>The base rate for this detection os 40Hz, so 46.2 Hz was chosen to oscillate at.</p>
 <p>The common anode pins on the display were connected to FPGA pins, but these do not provide enough voltage to drive the pin. Thus, the signal to the pins was bolstered by a PNP transistor.</p>
 <p>An external (off-board) DIP switch was also connected to the FPGA. The five LEDs used to display the output were also connected FPGA pins, in series with 390ohm resistors.</p>
+<p>The hardware calculations are as follows:</p>
+<p><img src="images/Lab2calcs.png" class="img-fluid"></p>
 <p>Overall, the pin assignment is as seen below:</p>
 <section id="pin-assignment" class="level3">
 <h3 class="anchored" data-anchor-id="pin-assignment">Pin Assignment</h3>
@@ -451,7 +453,7 @@ endmodule</code></pre>
 <h2 class="anchored" data-anchor-id="schematic">Schematic</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/block_diagram.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/Lab2schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Figure 1. Circuit Schematic</figcaption>
 </figure>
 </div>
@@ -460,7 +462,7 @@ endmodule</code></pre>
 <h2 class="anchored" data-anchor-id="block-diagram">Block Diagram</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/schematic.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/Lab2schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Figure 2. Block Diagram of HDL code</figcaption>
 </figure>
 </div>

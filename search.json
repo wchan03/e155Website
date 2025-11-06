@@ -16,9 +16,30 @@
   {
     "objectID": "labs/lab7/lab7.html",
     "href": "labs/lab7/lab7.html",
-    "title": "E155 Portfolio",
+    "title": "Design",
     "section": "",
-    "text": "Hello World"
+    "text": "In this lab, an encryption process, following the AES Standard, was designed and implemented on an FPGA. Additionally, SPI communication was established between the FPGA and the MCU using wires on the provided development board. The MCU was used to send a plaintext message and a key to the FPGA, and the correctly encrypted message was sent back."
+  },
+  {
+    "objectID": "labs/lab7/lab7.html#block-diagram",
+    "href": "labs/lab7/lab7.html#block-diagram",
+    "title": "Design",
+    "section": "Block Diagram",
+    "text": "Block Diagram\n\n\n\nFigure 2. Block Diagram"
+  },
+  {
+    "objectID": "labs/lab7/lab7.html#schematic",
+    "href": "labs/lab7/lab7.html#schematic",
+    "title": "Design",
+    "section": "Schematic",
+    "text": "Schematic\n\n\n\nFigure 3. Schematic"
+  },
+  {
+    "objectID": "labs/lab7/lab7.html#waveforms-logic",
+    "href": "labs/lab7/lab7.html#waveforms-logic",
+    "title": "Design",
+    "section": "Waveforms & Logic",
+    "text": "Waveforms & Logic\nEach submodule was tested using a testbench. Each module passed its testbench, and the waveforms are as seen below. First, (Figs. 4-7) I tested the modules that I built, then, I tested them all together (Fig. 9), and tested the provided module (Fig. 8).\n     \nThen, the design was uploaded to hardware. The SPI communication was confirmed using the logic analyzer and the LED signals on the board. These denoted whether or not the message recieved from the FPGA correctly matched the desired encrypted message."
   },
   {
     "objectID": "labs/lab5/lab5.html",
@@ -116,7 +137,7 @@
     "href": "labs/lab2/lab2.html#hardware",
     "title": "Introduction",
     "section": "Hardware",
-    "text": "Hardware\nThe circuit used all the FPGA pins, so there had to be multiplexing between the two displays to correctly display different values at the same time. This was done by driving either (not both) of the common anodes, turning each display on in turn, at a higher frequency than the human eye can detect.\nThe base rate for this detection os 40Hz, so 46.2 Hz was chosen to oscillate at.\nThe common anode pins on the display were connected to FPGA pins, but these do not provide enough voltage to drive the pin. Thus, the signal to the pins was bolstered by a PNP transistor.\nAn external (off-board) DIP switch was also connected to the FPGA. The five LEDs used to display the output were also connected FPGA pins, in series with 390ohm resistors.\nOverall, the pin assignment is as seen below:\n\nPin Assignment\n\nPin Assignment\n\n\nlogic\npin\n\n\n\n\nswitch1[0]\np20\n\n\nswitch1[1]\np19\n\n\nswitch1[2]\np21\n\n\nswitch1[3]\np10\n\n\nswitch2[0]\np37\n\n\nswitch2[1]\np31\n\n\nswitch2[2]\np35\n\n\nswitch2[3]\np32\n\n\nseg_out[0]\np6\n\n\nseg_out[1]\np11\n\n\nseg_out[2]\np46\n\n\nseg_out[3]\np45\n\n\nseg_out[4]\np3\n\n\nseg_out[5]\np48\n\n\nseg_out[6]\np4\n\n\nanodes[0]\np47\n\n\nanodes[1]\np2\n\n\nleds[0]\np12\n\n\nleds[1]\np13\n\n\nleds[2]\np48\n\n\nleds[3]\np9\n\n\nleds[4]\np44"
+    "text": "Hardware\nThe circuit used all the FPGA pins, so there had to be multiplexing between the two displays to correctly display different values at the same time. This was done by driving either (not both) of the common anodes, turning each display on in turn, at a higher frequency than the human eye can detect.\nThe base rate for this detection os 40Hz, so 46.2 Hz was chosen to oscillate at.\nThe common anode pins on the display were connected to FPGA pins, but these do not provide enough voltage to drive the pin. Thus, the signal to the pins was bolstered by a PNP transistor.\nAn external (off-board) DIP switch was also connected to the FPGA. The five LEDs used to display the output were also connected FPGA pins, in series with 390ohm resistors.\nThe hardware calculations are as follows:\n\nOverall, the pin assignment is as seen below:\n\nPin Assignment\n\nPin Assignment\n\n\nlogic\npin\n\n\n\n\nswitch1[0]\np20\n\n\nswitch1[1]\np19\n\n\nswitch1[2]\np21\n\n\nswitch1[3]\np10\n\n\nswitch2[0]\np37\n\n\nswitch2[1]\np31\n\n\nswitch2[2]\np35\n\n\nswitch2[3]\np32\n\n\nseg_out[0]\np6\n\n\nseg_out[1]\np11\n\n\nseg_out[2]\np46\n\n\nseg_out[3]\np45\n\n\nseg_out[4]\np3\n\n\nseg_out[5]\np48\n\n\nseg_out[6]\np4\n\n\nanodes[0]\np47\n\n\nanodes[1]\np2\n\n\nleds[0]\np12\n\n\nleds[1]\np13\n\n\nleds[2]\np48\n\n\nleds[3]\np9\n\n\nleds[4]\np44"
   },
   {
     "objectID": "labs/lab2/lab2.html#software",
