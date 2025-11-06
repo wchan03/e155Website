@@ -39,7 +39,7 @@
     "href": "labs/lab7/lab7.html#waveforms-logic",
     "title": "Design",
     "section": "Waveforms & Logic",
-    "text": "Waveforms & Logic\nEach submodule was tested using a testbench. Each module passed its testbench, and the waveforms are as seen below. First, (Figs. 4-7) I tested the modules that I built, then, I tested them all together (Fig. 9), and tested the provided module (Fig. 8).\n     \nThen, the design was uploaded to hardware. The SPI communication was confirmed using the logic analyzer and the LED signals on the board. These denoted whether or not the message recieved from the FPGA correctly matched the desired encrypted message."
+    "text": "Waveforms & Logic\nEach submodule was tested using a testbench. Each module passed its testbench, and the waveforms are as seen below. First, (Figs. 4-7) I tested the modules that I built, then, I tested them all together (Fig. 9), and tested the provided module (Fig. 8).\n     \nThen, the design was uploaded to hardware. The SPI communication was confirmed using the logic analyzer and the LED signals on the board. These denoted whether or not the message recieved from the FPGA correctly matched the desired encrypted message.\n\n\n\nFigure 10. Logic Analyzer trace of SPI communication"
   },
   {
     "objectID": "labs/lab5/lab5.html",

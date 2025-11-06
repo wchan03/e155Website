@@ -199,6 +199,12 @@ ul.task-list li input[type="checkbox"] {
 <p>Each submodule was tested using a testbench. Each module passed its testbench, and the waveforms are as seen below. First, (Figs. 4-7) I tested the modules that I built, then, I tested them all together (Fig. 9), and tested the provided module (Fig. 8).</p>
 <p><img src="images/addroundkey_waveform.png" class="img-fluid" alt="Figure 4. AddRoundKey Testbench Waveform"> <img src="images/keyexpansion_waveform.png" class="img-fluid" alt="Figure 5. RoundKey Testbench Waveform"> <img src="images/sbox_waveforms.png" class="img-fluid" alt="Figure 6. SubByte Testbench Waveform"> <img src="images/shiftrows_waveform.png" class="img-fluid" alt="Figure 7. ShiftRows Testbench Waveform"> <img src="images/spi_waveform.png" class="img-fluid" alt="Figure 8. aes_spi Testbench Waveform"> <img src="images/aes_core_waveform.png" class="img-fluid" alt="Figure 9. aes_core Testbench Waveform"></p>
 <p>Then, the design was uploaded to hardware. The SPI communication was confirmed using the logic analyzer and the LED signals on the board. These denoted whether or not the message recieved from the FPGA correctly matched the desired encrypted message.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/logic_analyzer.jpg" class="img-fluid figure-img"></p>
+<figcaption>Figure 10. Logic Analyzer trace of SPI communication</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="conclusion" class="level1">

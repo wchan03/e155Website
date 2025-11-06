@@ -168,7 +168,7 @@ ul.task-list li input[type="checkbox"] {
 <h1>Design and Testing Methodology</h1>
 <p>The soldering included both SMD and TMD parts to a given PCB.</p>
 <p>The LED was driven by using the HSOSC at 24MHz and a counter to divide the signal so that the LED could blink at the desired 2.4Hz. Two other LEDs were meant to be driven, but as of right now, they are absent from the board due to materials constraints.</p>
-<p>The 7-segment display was driven using a module involving a simple case statement, that evaluated the input from the onboard switches, then reflected that value in hex. The display was connected to pins off the FGPA, and each segment was turned on</p>
+<p>The 7-segment display was driven using a module involving a simple case statement, that evaluated the input from the onboard switches, then reflected that value in hex. The display was connected to pins off the FGPA, and each segment was turned on.</p>
 </section>
 <section id="technical-documentation" class="level1">
 <h1>Technical Documentation</h1>
@@ -266,7 +266,8 @@ endmodule</code></pre>
 <section id="results-and-discussion" class="level1">
 <h1>Results and Discussion</h1>
 <p>The design met all intended objectives. The LED blinks at the desired rate, and the 7 segment display correctly produces digits 0-F based on input from the switches.</p>
-<p>However, it proved difficult to run the QuestaSim testbench simulation. This aspect would need more work, but the design is verified by physical testing.</p>
+<p>The seg_disp module and top level moduele were both validated by automatic testbenches and QuestaSim simulations. I verified all the logic would work correctly, as seen in the below waveforms, which matched my expectations.</p>
+<p><img src="images/lab1_seg_disp_waveforms.png" class="img-fluid" alt="Segment Display waveforms"> <img src="images/lab1_testbench_waveforms.png" class="img-fluid" alt="Top Level Module waveforms"></p>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
