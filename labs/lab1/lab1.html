@@ -169,6 +169,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The soldering included both SMD and TMD parts to a given PCB.</p>
 <p>The LED was driven by using the HSOSC at 24MHz and a counter to divide the signal so that the LED could blink at the desired 2.4Hz. Two other LEDs were meant to be driven, but as of right now, they are absent from the board due to materials constraints.</p>
 <p>The 7-segment display was driven using a module involving a simple case statement, that evaluated the input from the onboard switches, then reflected that value in hex. The display was connected to pins off the FGPA, and each segment was turned on.</p>
+<p>The resistor values were calculated based on the acceptable current off the FPGA pins. <img src="images/current_calcs.png" class="img-fluid"></p>
 </section>
 <section id="technical-documentation" class="level1">
 <h1>Technical Documentation</h1>
